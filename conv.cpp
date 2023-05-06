@@ -71,9 +71,9 @@ void print_padded_output(int Y[(IN_H - F_H)/S + 1][(IN_W - F_W)/S + 1], const ch
     }
 }
 
-void max_pooling(int Y[(IN_H - F_H) / S + 1][(IN_W - F_W) / S + 1], int pool_Y[(IN_H - F_H - POOL_H) / S + 1][(IN_W - F_W - POOL_W) / S + 1]) {
-    for (int i = 0; i < (IN_H - F_H - POOL_H) / S + 1; i++) {
-        for (int j = 0; j < (IN_W - F_W - POOL_W) / S + 1; j++) {
+void max_pooling(int Y[(IN_H - F_H)/S + 1][(IN_W - F_W)/S + 1], int pool_Y[(IN_H - F_H - POOL_H)/S + 1][(IN_W - F_W - POOL_W)/S + 1]) {
+    for (int i = 0; i < (IN_H - F_H - POOL_H)/S + 1; i++) {
+        for (int j = 0; j < (IN_W - F_W - POOL_W)/S + 1; j++) {
             int max_value = Y[i][j];
             for (int r = 0; r < POOL_H; r++) {
                 for (int c = 0; c < POOL_W; c++) {
@@ -87,10 +87,10 @@ void max_pooling(int Y[(IN_H - F_H) / S + 1][(IN_W - F_W) / S + 1], int pool_Y[(
     }
 }
 
-void print_pooling_output(int pool_Y[(IN_H - F_H - POOL_H) / S + 1][(IN_W - F_W - POOL_W) / S + 1], const char *filter_name) {
+void print_pooling_output(int pool_Y[(IN_H - F_H - POOL_H)/S + 1][(IN_W - F_W - POOL_W)/S + 1], const char *filter_name) {
     printf("\tMax Pooling Output %s:\n", filter_name);
-    for (int i = 0; i < (IN_H - F_H - POOL_H) / S + 1; i++) {
-        for (int j = 0; j < (IN_W - F_W - POOL_W) / S + 1; j++) {
+    for (int i = 0; i < (IN_H - F_H - POOL_H)/S + 1; i++) {
+        for (int j = 0; j < (IN_W - F_W - POOL_W)/S + 1; j++) {
             printf("\t\t%d   ", pool_Y[i][j]);
         }
         printf("\n");
@@ -157,9 +157,9 @@ int main() {
 	print_padded_output(Y2, "filter 2", pad_val);
 	print_padded_output(Y3, "filter 3", pad_val);
 	
-	int pool_Y1[(IN_H - F_H - POOL_H) / S + 1][(IN_W - F_W - POOL_W) / S + 1];
-	int pool_Y2[(IN_H - F_H - POOL_H) / S + 1][(IN_W - F_W - POOL_W) / S + 1];
-	int pool_Y3[(IN_H - F_H - POOL_H) / S + 1][(IN_W - F_W - POOL_W) / S + 1];
+	int pool_Y1[(IN_H - F_H - POOL_H)/S + 1][(IN_W - F_W - POOL_W)/S + 1];
+	int pool_Y2[(IN_H - F_H - POOL_H)/S + 1][(IN_W - F_W - POOL_W)/S + 1];
+	int pool_Y3[(IN_H - F_H - POOL_H)/S + 1][(IN_W - F_W - POOL_W)/S + 1];
 
 	printf("Max Pooling:\n");
     max_pooling(Y1, pool_Y1);
