@@ -14,7 +14,7 @@
 #define POOL_H 2
 #define POOL_W 2
 
-void conv(int X[IN_D][IN_H][IN_W], int W[F_D][F_H][F_W], int b, int Y[(IN_H - F_H)/S + 1][(IN_W - F_W)/S + 1]) {
+void conv(int X[IN_D][IN_H][IN_W], int W[F_D][F_H][F_W], int b, int Y[(IN_H - F_H)/S + 1][(IN_W - F_W)/S + 1], const char* filter_name) {
     for (int i = 0; i < (IN_H - F_H)/S + 1; i++) {
         for (int j = 0; j < (IN_H - F_H)/S + 1; j++) {
             int sum = b;
@@ -28,9 +28,7 @@ void conv(int X[IN_D][IN_H][IN_W], int W[F_D][F_H][F_W], int b, int Y[(IN_H - F_
             Y[i][j] = sum;
         }
     }
-}
-
-void print_output(int Y[(IN_H - F_H)/S + 1][(IN_W - F_W)/S + 1], const char* filter_name) {
+    
     printf("\tOutput %s:\n", filter_name);
     for (int i = 0; i < (IN_H - F_H)/S + 1; i++) {
         for (int j = 0; j < (IN_H - F_H)/S + 1; j++) {
@@ -61,8 +59,7 @@ void print_padded_output(int Y[(IN_H - F_H)/S + 1][(IN_W - F_W)/S + 1], const ch
         }
     }
     
-    // Print 
-    printf("\tPadded Output %s:\n", filter_name);
+    printf("\tOutput %s:\n", filter_name);
     for (int i = 0; i < pad_h; i++) {
         for (int j = 0; j < pad_w; j++) {
             printf("\t\t%2d", padded[i][j]);
@@ -71,7 +68,7 @@ void print_padded_output(int Y[(IN_H - F_H)/S + 1][(IN_W - F_W)/S + 1], const ch
     }
 }
 
-void max_pooling(int Y[(IN_H - F_H)/S + 1][(IN_W - F_W)/S + 1], int pool_Y[(IN_H - F_H - POOL_H)/S + 1][(IN_W - F_W - POOL_W)/S + 1]) {
+void max_pooling(int Y[(IN_H - F_H) / S + 1][(IN_W - F_W)/S + 1], int pool_Y[(IN_H - F_H - POOL_H)/S + 1][(IN_W - F_W - POOL_W)/S + 1], const char *filter_name) {
     for (int i = 0; i < (IN_H - F_H - POOL_H)/S + 1; i++) {
         for (int j = 0; j < (IN_W - F_W - POOL_W)/S + 1; j++) {
             int max_value = Y[i][j];
@@ -85,10 +82,8 @@ void max_pooling(int Y[(IN_H - F_H)/S + 1][(IN_W - F_W)/S + 1], int pool_Y[(IN_H
             pool_Y[i][j] = max_value;
         }
     }
-}
-
-void print_pooling_output(int pool_Y[(IN_H - F_H - POOL_H)/S + 1][(IN_W - F_W - POOL_W)/S + 1], const char *filter_name) {
-    printf("\tMax Pooling Output %s:\n", filter_name);
+    
+    printf("\tOutput %s:\n", filter_name);
     for (int i = 0; i < (IN_H - F_H - POOL_H)/S + 1; i++) {
         for (int j = 0; j < (IN_W - F_W - POOL_W)/S + 1; j++) {
             printf("\t\t%d   ", pool_Y[i][j]);
@@ -141,15 +136,9 @@ int main() {
     int b3 = 0;
 
 	printf("No Padding:\n");
-    conv(X, W1, b1, Y1);
-    conv(X, W2, b2, Y2);
-    conv(X, W3, b3, Y3);
-
-    print_output(Y1, "filter 1");
-    printf("\n");
-    print_output(Y2, "filter 2");
-    printf("\n");
-    print_output(Y3, "filter 3");
+    conv(X, W1, b1, Y1, "filter 1");
+    conv(X, W2, b2, Y2, "filter 2");
+    conv(X, W3, b3, Y3, "filter 3");
 	
 	int pad_val = 0;
 	printf("With Padding:\n");
@@ -162,12 +151,9 @@ int main() {
 	int pool_Y3[(IN_H - F_H - POOL_H)/S + 1][(IN_W - F_W - POOL_W)/S + 1];
 
 	printf("Max Pooling:\n");
-    max_pooling(Y1, pool_Y1);
-    print_pooling_output(pool_Y1, "filter 1");
-    max_pooling(Y2, pool_Y2);
-    print_pooling_output(pool_Y2, "filter 2");
-    max_pooling(Y3, pool_Y3);
-    print_pooling_output(pool_Y3, "filter 3");
+    max_pooling(Y1, pool_Y1, "filter 1");
+    max_pooling(Y2, pool_Y2, "filter 2");
+    max_pooling(Y3, pool_Y3, "filter 3");
     
     return 0;
 }
